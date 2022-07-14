@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/ready-01/pom.xml" />
+        <option value="$PROJECT_DIR$/swagger/pom.xml" />
+        <option value="$PROJECT_DIR$/ready-003-swagger/ready-03-swagger/pom.xml" />
+        <option value="$PROJECT_DIR$/micr-api/pom.xml" />
+        <option value="$PROJECT_DIR$/micr-dataservice/pom.xml" />
+        <option value="$PROJECT_DIR$/micr-parent/pom.xml" />
+        <option value="$PROJECT_DIR$/micr-web/pom.xml" />
+        <option value="$PROJECT_DIR$/micr-common/pom.xml" />
+        <option value="$PROJECT_DIR$/ready-03-swagger/pom.xml" />
+        <option value="$PROJECT_DIR$/ready-01-fastJson/pom.xml" />
+        <option value="$PROJECT_DIR$/ready-02-HttpClient/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8 (1)" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>

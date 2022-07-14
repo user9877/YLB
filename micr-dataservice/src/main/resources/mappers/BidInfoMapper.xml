@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjpowernode.dataservice.mapper.BidInfoMapper">
+  <resultMap id="BaseResultMap" type="com.bjpowernode.api.domain.BidInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="prod_id" jdbcType="INTEGER" property="prodId" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="bid_money" jdbcType="DECIMAL" property="bidMoney" />
+    <result column="bid_time" jdbcType="TIMESTAMP" property="bidTime" />
+    <result column="bid_status" jdbcType="INTEGER" property="bidStatus" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, prod_id, uid, bid_money, bid_time, bid_status
+  </sql>
+  <!--自定义开始-->
+  <select id="selectSumAllBidMoney" resultType="java.math.BigDecimal">
+    SELECT
+      sum( bid_money ) AS money
+    FROM
+      b_bid_info
+  </select>
+  <!--自定义结束-->
+  <insert id="insertSelective" parameterType="com.bjpowernode.api.domain.BidInfo">
+    insert into b_bid_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="prodId != null">
+        prod_id,
+      </if>
+      <if test="uid != null">
+        uid,
+      </if>
+      <if test="bidMoney != null">
+        bid_money,
+      </if>
+      <if test="bidTime != null">
+        bid_time,
+      </if>
+      <if test="bidStatus != null">
+        bid_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="prodId != null">
+        #{prodId,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null">
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="bidMoney != null">
+        #{bidMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="bidTime != null">
+        #{bidTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bidStatus != null">
+        #{bidStatus,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+
+</mapper>

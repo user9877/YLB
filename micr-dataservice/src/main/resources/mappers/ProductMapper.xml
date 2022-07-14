@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjpowernode.dataservice.mapper.ProductMapper">
+  <resultMap id="BaseResultMap" type="com.bjpowernode.api.domain.Product">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="rate" jdbcType="DECIMAL" property="rate" />
+    <result column="cycle" jdbcType="INTEGER" property="cycle" />
+    <result column="release_time" jdbcType="DATE" property="releaseTime" />
+    <result column="product_type" jdbcType="INTEGER" property="productType" />
+    <result column="product_no" jdbcType="VARCHAR" property="productNo" />
+    <result column="product_money" jdbcType="DECIMAL" property="productMoney" />
+    <result column="left_product_money" jdbcType="DECIMAL" property="leftProductMoney" />
+    <result column="bid_min_limit" jdbcType="DECIMAL" property="bidMinLimit" />
+    <result column="bid_max_limit" jdbcType="DECIMAL" property="bidMaxLimit" />
+    <result column="product_status" jdbcType="INTEGER" property="productStatus" />
+    <result column="product_full_time" jdbcType="TIMESTAMP" property="productFullTime" />
+    <result column="product_desc" jdbcType="VARCHAR" property="productDesc" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, product_name, rate, cycle, release_time, product_type, product_no, product_money,
+    left_product_money, bid_min_limit, bid_max_limit, product_status, product_full_time,
+    product_desc
+  </sql>
+  <!--自定义开始-->
+  <select id="selectHistoryAverageRate" resultType="java.math.BigDecimal">
+    SELECT
+      round( avg( rate ), 2 ) AS avgRate
+    FROM
+      b_product_info
+  </select>
+ <!-- 按类型查询理财产品-->
+  <select id="selectProductsByType" resultMap="BaseResultMap">
+    SELECT
+      <include refid="Base_Column_List"></include>
+    FROM
+      b_product_info
+    WHERE
+      product_type = #{type}
+    ORDER BY
+      release_time DESC,id desc
+      LIMIT #{offset},#{rows}
+  </select>
+
+  <select id="countByType" resultType="java.lang.Integer">
+    SELECT
+      count( id ) AS ct
+    FROM
+      b_product_info
+    WHERE
+      product_type =#{productType}
+  </select>
+
+  <!--自定义结束-->
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from b_product_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.bjpowernode.api.domain.Product">
+    update b_product_info
+    <set>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="rate != null">
+        rate = #{rate,jdbcType=DECIMAL},
+      </if>
+      <if test="cycle != null">
+        cycle = #{cycle,jdbcType=INTEGER},
+      </if>
+      <if test="releaseTime != null">
+        release_time = #{releaseTime,jdbcType=DATE},
+      </if>
+      <if test="productType != null">
+        product_type = #{productType,jdbcType=INTEGER},
+      </if>
+      <if test="productNo != null">
+        product_no = #{productNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productMoney != null">
+        product_money = #{productMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="leftProductMoney != null">
+        left_product_money = #{leftProductMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="bidMinLimit != null">
+        bid_min_limit = #{bidMinLimit,jdbcType=DECIMAL},
+      </if>
+      <if test="bidMaxLimit != null">
+        bid_max_limit = #{bidMaxLimit,jdbcType=DECIMAL},
+      </if>
+      <if test="productStatus != null">
+        product_status = #{productStatus,jdbcType=INTEGER},
+      </if>
+      <if test="productFullTime != null">
+        product_full_time = #{productFullTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="productDesc != null">
+        product_desc = #{productDesc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+</mapper>
