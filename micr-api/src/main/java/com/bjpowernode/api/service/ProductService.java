@@ -15,6 +15,8 @@ import java.util.List;
 public interface ProductService {
     //分页查询理财产品
     List<Product> queryProductByType(Integer productType,Integer pageNo,Integer pageSize);
-
+    //某个类型的产品记录总数
     Integer staticsRecordsByType(Integer productType);
+    //根据主键查询产品
+    Product queryProductById(Integer productId);
 }

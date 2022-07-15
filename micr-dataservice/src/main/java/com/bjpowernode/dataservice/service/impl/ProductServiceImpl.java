@@ -44,4 +44,13 @@ public class ProductServiceImpl implements ProductService {
         }
         return records;
     }
+
+    @Override
+    public Product queryProductById(Integer productId) {
+        Product product = null;
+        if(AppUtil.checkProductId(productId)){
+            product = productMapper.selectProductById(productId);
+        }
+        return product;
+    }
 }

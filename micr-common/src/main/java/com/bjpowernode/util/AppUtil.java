@@ -9,12 +9,31 @@ package com.bjpowernode.util;
  */
 
 public class AppUtil {
+    //判断产品类型
     public static boolean checkProductType(Integer productType){
         boolean flag = false;
         if (productType != null) {
             if(productType > -1 && productType < 3){
                 flag = true;
             }
+        }
+        return flag;
+    }
+
+    //判断产品id
+    public static Boolean checkProductId(Integer productId){
+        boolean flag = false;
+        if(productId != null && productId > 0){
+            flag = true;
+        }
+        return flag;
+    }
+
+    //判断userId
+    public static Boolean checkuserId(Integer userId){
+        boolean flag = false;
+        if(userId != null && userId > 0){
+            flag = true;
         }
         return flag;
     }

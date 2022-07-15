@@ -12,9 +12,6 @@
         <option value="$PROJECT_DIR$/micr-parent/pom.xml" />
         <option value="$PROJECT_DIR$/micr-web/pom.xml" />
         <option value="$PROJECT_DIR$/micr-common/pom.xml" />
-        <option value="$PROJECT_DIR$/ready-03-swagger/pom.xml" />
-        <option value="$PROJECT_DIR$/ready-01-fastJson/pom.xml" />
-        <option value="$PROJECT_DIR$/ready-02-HttpClient/pom.xml" />
       </list>
     </option>
   </component>

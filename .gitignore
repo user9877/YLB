@@ -1,5 +1,7 @@
 # Project exclude paths
 /micr-api/target/
 /micr-common/target/
-/ready-01-fastJson/target/
-/ready-02-HttpClient/target/
+/micr-dataservice/target/
+/micr-web/target/
+/micr-task/target/
+/micr-pay/target/

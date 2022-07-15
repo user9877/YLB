@@ -38,6 +38,4 @@ public class YlbPlatformInfoController  extends BaseController{
         cr.setData(multiTypeProducts);
         return cr;
     }
-
-
 }

@@ -35,6 +35,7 @@
         <swagger.ui.version>1.9.6</swagger.ui.version>
         <swagger.model.version>1.6.1</swagger.model.version>
         <curator.version>4.0.1</curator.version>
+        <hutool.verion>5.8.2</hutool.verion>
     </properties>
 
     <!--声明依赖，声明自己需要的springboot以外的依赖-->
@@ -110,6 +111,12 @@
                 <artifactId>swagger-models</artifactId>
                 <version>${swagger.model.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.verion}</version>
+            </dependency>
         </dependencies>
 
     </dependencyManagement>
@@ -118,6 +125,7 @@
         <plugins>
             <!-- 编译插件 -->
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <!-- 插件的版本 -->
                 <version>3.5.1</version>

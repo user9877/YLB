@@ -7,16 +7,16 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="micr-api" />
-        <module name="ready-03-swagger" />
-        <module name="ready-02-HttpClient" />
         <module name="micr-web" />
-        <module name="ready-01-fastJson" />
         <module name="micr-dataservice" />
         <module name="micr-common" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="ready-003-swagger" target="1.8" />
+      <module name="ready-01-fastJson" target="1.8" />
+      <module name="ready-02-HttpClient" target="1.8" />
+      <module name="ready-03-swagger" target="1.8" />
       <module name="ready-04-mybatis-nxgc" target="1.8" />
     </bytecodeTargetLevel>
   </component>

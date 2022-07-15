@@ -51,6 +51,12 @@
       product_type =#{productType}
   </select>
 
+  <select id="selectProductById" resultType="com.bjpowernode.api.domain.Product">
+    select <include refid="Base_Column_List"></include>
+        from b_product_info
+    where
+        id = #{productId}
+  </select>
   <!--自定义结束-->
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select

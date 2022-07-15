@@ -19,4 +19,7 @@ public interface ProductMapper {
     List<Product> selectProductsByType(@Param("type") Integer type, @Param("offset") Integer offset, @Param("rows") Integer rows);
 
     Integer countByType(Integer productType);
+
+    Product selectProductById(@Param("productId") Integer productId);
+
 }
