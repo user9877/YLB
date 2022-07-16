@@ -18,4 +18,8 @@ public class RedisKeyContants {
 
     //投资排行榜
     public static final String INVEST_MONEY_RANK = "INVEST:MONEY:RANK";
+
+    //注册的短信验证码
+    public static final String SMS_CODE_REGISTER = "SMS_CODE_REGISTER";
+
 }

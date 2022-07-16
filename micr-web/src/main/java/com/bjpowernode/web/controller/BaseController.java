@@ -4,6 +4,7 @@ import com.bjpowernode.api.service.InvestService;
 import com.bjpowernode.api.service.ProductService;
 import com.bjpowernode.api.service.YlbBaseService;
 import com.bjpowernode.api.service.user.UserService;
+import com.bjpowernode.web.service.SmsService;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
@@ -20,6 +21,10 @@ import javax.annotation.Resource;
 public class BaseController {
     @Resource
     protected StringRedisTemplate stringRedisTemplate;
+
+    //短信服务
+    @Resource
+    protected SmsService smsService;
     /*声明拼台接口服务*/
     @DubboReference(interfaceClass = YlbBaseService.class,version = "1.0.0")
     protected YlbBaseService ylbBaseService;
@@ -32,4 +37,5 @@ public class BaseController {
     //用户服务
     @DubboReference(interfaceClass = UserService.class,version = "1.0.0")
     protected UserService userService;
+
 }

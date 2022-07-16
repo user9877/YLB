@@ -1,5 +1,7 @@
 package com.bjpowernode.util;
 
+import java.util.regex.Pattern;
+
 /**
  * ClassName:AppUtil
  * Package:com.bjpowernode.util
@@ -50,6 +52,15 @@ public class AppUtil {
             pageSize=9;
         }
         return pageSize;
+    }
+
+    //判断手机号格式是否正确
+    public static Boolean checkPhone(String phone){
+        boolean flag = false;
+        if(phone != null){
+            flag = Pattern.matches("^1[1-9]\\d{9}$",phone);
+        }
+        return flag;
     }
 
 }

@@ -36,6 +36,7 @@
         <swagger.model.version>1.6.1</swagger.model.version>
         <curator.version>4.0.1</curator.version>
         <hutool.verion>5.8.2</hutool.verion>
+        <lang3.version>3.8.1</lang3.version>
     </properties>
 
     <!--声明依赖，声明自己需要的springboot以外的依赖-->
@@ -116,6 +117,13 @@
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
                 <version>${hutool.verion}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${lang3.version}</version>
             </dependency>
         </dependencies>
 

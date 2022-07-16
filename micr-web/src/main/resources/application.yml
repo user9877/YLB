@@ -21,3 +21,12 @@ dubbo:
     check: false
     timeout: 5000
     retries: 0
+
+
+#配置短信服务接口
+jdwx:
+  sms:
+    url: https://way.jd.com/chuangxin/dxjk
+    reg-content: 【创信】你的注册验证码是：%s，3分钟内有效！
+    login-content: 【创信】你的登录验证码是：%s，10分钟内有效！
+    appkey: 3680fa919b771148da626bbcbd459475
