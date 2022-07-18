@@ -30,3 +30,7 @@ mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
+
+app:
+  password:
+    salt: 12345678223456783234567842345678

@@ -35,6 +35,7 @@ public class SmsService {
         boolean handleSms = false;
         //注册时短信的内容
         String random = RandomStringUtils.randomNumeric(6);
+        //String content = jdwxSmsConfig.getRegContent();
         String content = String.format(jdwxSmsConfig.getRegContent(), random);
         System.out.println("注册的短信验证码"+content);
         if (sendSmsCore(phone,content)) {
@@ -58,7 +59,7 @@ public class SmsService {
         try {
             CloseableHttpResponse response = client.execute(get);
             if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
-                //String str = EntityUtils.toString(response.getEntity());
+               // String str = EntityUtils.toString(response.getEntity());
                 String str = "{\n" +//模拟发送
                         "    \"code\": \"10000\",\n" +
                         "    \"charge\": false,\n" +
@@ -94,9 +95,19 @@ public class SmsService {
         }
         return isSend;
     }
-
+    //检查注册短信验证码是否有效
     public boolean checkSmsCodeRegister(String phone) {
         String key = RedisKeyContants.SMS_CODE_REGISTER+phone;
         return stringRedisTemplate.hasKey(key);
+    }
+    //检查注册短信验证码是否有效
+    public boolean checkSmsCodeRegisterValid(String phone, String verificationCode) {
+        boolean flag = false;
+        String key = RedisKeyContants.SMS_CODE_REGISTER+phone;
+        String saveCode = stringRedisTemplate.boundValueOps(key).get();
+        if(verificationCode.equals(saveCode)){
+            flag = true;
+        }
+        return flag;
     }
 }

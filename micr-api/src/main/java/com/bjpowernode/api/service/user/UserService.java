@@ -1,6 +1,7 @@
 package com.bjpowernode.api.service.user;
 
 import com.bjpowernode.api.model.UserAccountModel;
+import com.bjpowernode.api.result.RPCResult;
 
 /**
  * ClassName:UserService
@@ -13,4 +14,6 @@ import com.bjpowernode.api.model.UserAccountModel;
 public interface UserService {
     //根据主键查询用户和资金
     UserAccountModel queryAllInfoByUid(Integer uid);
+    //用户注册功能
+    RPCResult registerUser(String phone, String loginPassword);
 }

@@ -14,5 +14,9 @@ public interface UserMapper {
     int countRegisterUsers();
     //根据主键查询用户和资金
     UserAccountModel selectUserAccountById(@Param("id") Integer uid);
+    //按手机号查询
+    User selectByPhone(@Param("phone") String phone);
+    //注册用户，同时返回id
+    int insertUserReturnId(User newUser);
 }
 
