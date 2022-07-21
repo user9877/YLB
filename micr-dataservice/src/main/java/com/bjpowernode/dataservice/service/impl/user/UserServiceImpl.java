@@ -10,6 +10,7 @@ import com.bjpowernode.dataservice.mapper.FinanceAccountMapper;
 import com.bjpowernode.dataservice.mapper.UserMapper;
 import com.bjpowernode.util.AppUtil;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +26,7 @@ import java.util.Date;
  * Description:
  * Autor:FH
  */
-@DubboService(interfaceClass = UserService.class,version = "1.0.0")
+@DubboService(interfaceClass = UserService.class, version = "1.0.0")
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
@@ -33,30 +34,32 @@ public class UserServiceImpl implements UserService {
     private FinanceAccountMapper accountMapper;
     @Value("${app.password.salt}")
     private String loginPasswordSalt;
+
     //根据主键查询用户和资金
     @Override
     public UserAccountModel queryAllInfoByUid(Integer uid) {
         UserAccountModel userAccountModel = null;
-        if(AppUtil.checkuserId(uid)){
+        if (AppUtil.checkuserId(uid)) {
             userAccountModel = userMapper.selectUserAccountById(uid);
 
         }
         return userAccountModel;
     }
+
     //用户注册功能
     @Transactional(rollbackFor = Exception.class)
     @Override
     public synchronized RPCResult registerUser(String phone, String loginPassword) {
         RPCResult rpcResult = new RPCResult(ResultCode.DUBBO_PARAM_ERROR.getCode(),
                 ResultCode.DUBBO_PARAM_ERROR.getText(), "");
-        if(AppUtil.checkPhone(phone) && loginPassword != null){
+        if (AppUtil.checkPhone(phone) && loginPassword != null) {
             //查询手机号是否注册过
             User user = userMapper.selectByPhone(phone);
-            if(user == null){
+            if (user == null) {
                 //没有注册过,可以注册
                 //把用户信息添加到u_user表，同时把新的用户信息的id添加到u_finance_account
                 //密码加盐(自定义一个字符串参与密码的二次加密)
-                String newPassword = DigestUtils.md5Hex(loginPassword+loginPasswordSalt);
+                String newPassword = DigestUtils.md5Hex(loginPassword + loginPasswordSalt);
                 User newUser = new User();
                 newUser.setPhone(phone);
                 newUser.setLoginPassword(newPassword);
@@ -69,22 +72,23 @@ public class UserServiceImpl implements UserService {
                 accountMapper.insert(account);
                 rpcResult = new RPCResult(ResultCode.DUBBO_PARAM_SUCCESS.getCode(),
                         ResultCode.DUBBO_PARAM_SUCCESS.getText(), newUser);
-            }else{
+            } else {
                 rpcResult = new RPCResult(ResultCode.DUBBO_PHONE_EXITS.getCode(),
                         ResultCode.DUBBO_PHONE_EXITS.getText(), user);
             }
         }
         return rpcResult;
     }
+
     //用户登录
     @Override
     public User userLogin(String phone, String loginPassword) {
         User user = null;
-        if(AppUtil.checkPhone(phone) && AppUtil.checkLoginPassword(loginPassword)){
+        if (AppUtil.checkPhone(phone) && AppUtil.checkLoginPassword(loginPassword)) {
             //二次加密后的密码和注册时一样
-            String newPassword = DigestUtils.md5Hex(loginPassword+loginPasswordSalt);
-            user = userMapper.selectLogin(phone ,newPassword);
-            if(user != null){
+            String newPassword = DigestUtils.md5Hex(loginPassword + loginPasswordSalt);
+            user = userMapper.selectLogin(phone, newPassword);
+            if (user != null) {
                 //更新用户最后登录时间
                 User updateUser = new User();
                 updateUser.setId(user.getId());
@@ -93,5 +97,19 @@ public class UserServiceImpl implements UserService {
             }
         }
         return user;
+    }
+
+    @Override
+    public boolean modifyRealName(Integer uid, String name, String idCard) {
+        boolean modify = false;
+        if (AppUtil.checkuserId(uid) && !StringUtils.isAnyBlank(name, idCard)) {
+            User user = new User();
+            user.setId(uid);
+            user.setName(name);
+            user.setIdCard(idCard);
+            int rows = userMapper.updateByPrimaryKeySelective(user);
+            modify = rows > 0;
+        }
+        return modify;
     }
 }

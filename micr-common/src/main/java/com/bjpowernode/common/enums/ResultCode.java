@@ -18,6 +18,9 @@ public enum ResultCode {
     FRONT_SMS_FAIL(1003,"短信发送失败"),
     FRONT_SMS_EXIST(1004,"验证码可以继续使用"),
     FRONT_CODE_INVALID(1005,"无效的验证码"),
+    FRONT_HAS_REALNAME(1006,"不能重复认证"),
+    FRONT_REALNAME_FAIL(1007,"认证失败"),
+
     FRONT_TOKEN_INVALID(2999,"登录信息已失效,请重新登录"),
 
     //dubbo消费者和提供者之间业务处理错误，3000<=code<7000

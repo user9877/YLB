@@ -2,9 +2,11 @@ package com.bjpowernode.web.controller;
 
 import cn.hutool.core.date.DateUtil;
 import com.bjpowernode.api.domain.User;
+import com.bjpowernode.api.model.UserAccountModel;
 import com.bjpowernode.api.result.RPCResult;
 import com.bjpowernode.common.RedisKeyContants;
 import com.bjpowernode.common.enums.ResultCode;
+import com.bjpowernode.web.model.RealNameVO;
 import com.bjpowernode.web.model.UserParam;
 import com.bjpowernode.web.resp.CommonResult;
 import io.swagger.annotations.Api;
@@ -12,10 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.BoundHashOperations;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -34,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 @CrossOrigin
 @RestController
 public class UserController extends BaseController {
+    //注册
     @PostMapping("/v1/user/register")
     public CommonResult userRegister(@RequestBody UserParam userParam) {
         CommonResult cr = CommonResult.Fail();
@@ -118,9 +118,28 @@ public class UserController extends BaseController {
     //实名认证
     @ApiOperation(value = "实名认证")
     @PostMapping("/v1/user/realname")
-    public CommonResult realName(){
+    public CommonResult realName(@RequestHeader("uid") Integer uid,
+                                 @RequestBody RealNameVO realNameVO){
         CommonResult cr = CommonResult.OK();
-
+        cr.setResult(ResultCode.FRONT_REQ_PARAM);
+        if(realNameVO.checkData()){
+            UserAccountModel userAccountModel = userService.queryAllInfoByUid(uid);
+            //判断用户是否已经进行过实名认证
+            if(userAccountModel != null &&
+                    userAccountModel.getPhone().equals(realNameVO.getPhone())){
+                if(StringUtils.isBlank(userAccountModel.getName())){
+                    //需要实名认证
+                    boolean realname = realNameService.handleRealName(uid,realNameVO.getName(),realNameVO.getIdCard());
+                    if(realname){
+                        cr = CommonResult.OK();
+                    }else{
+                        cr.setResult(ResultCode.FRONT_REALNAME_FAIL);
+                    }
+                }else{
+                    cr.setResult(ResultCode.FRONT_HAS_REALNAME);
+                }
+            }
+        }
         return cr;
     }
 }

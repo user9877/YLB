@@ -30,3 +30,7 @@ jdwx:
     reg-content: 【创信】你的注册验证码是：%s，3分钟内有效！
     login-content: 【创信】你的登录验证码是：%s，10分钟内有效！
     appkey: 953baed688785c86bded933eb3ccd2b6
+  realname:
+    url: https://way.jd.com/youhuoBeijing/test
+    appkey: 953baed688785c86bded933eb3ccd2b6
+

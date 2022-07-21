@@ -17,6 +17,8 @@ public interface UserService {
     UserAccountModel queryAllInfoByUid(Integer uid);
     //用户注册功能
     RPCResult registerUser(String phone, String loginPassword);
-
+    /*用户登录*/
     User userLogin(String phone, String loginPassword);
+    //实名认证
+    boolean modifyRealName(Integer uid, String name, String idCard);
 }
