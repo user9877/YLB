@@ -1,14 +1,27 @@
 package com.bjpowernode.web.controller;
 
+import cn.hutool.core.date.DateUtil;
+import com.bjpowernode.api.domain.User;
 import com.bjpowernode.api.result.RPCResult;
+import com.bjpowernode.common.RedisKeyContants;
 import com.bjpowernode.common.enums.ResultCode;
 import com.bjpowernode.web.model.UserParam;
 import com.bjpowernode.web.resp.CommonResult;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * ClassName:UserController
@@ -22,26 +35,92 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController extends BaseController {
     @PostMapping("/v1/user/register")
-    public CommonResult userRegister(@RequestBody UserParam userParam){
+    public CommonResult userRegister(@RequestBody UserParam userParam) {
         CommonResult cr = CommonResult.Fail();
-        if(userParam.checkData()){
+        if (userParam.checkData()) {
             //参数正确，可以注册
             //1.检查验证码是否有效
-            boolean isValid = smsService.checkSmsCodeRegisterValid(userParam.getPhone(),userParam.getVerificationCode());
-            if(isValid){
+            boolean isValid = smsService.checkSmsCodeRegisterValid(userParam.getPhone(), userParam.getVerificationCode());
+            if (isValid) {
                 //验证码有效，可以注册
-                RPCResult rpcResult = userService.registerUser(userParam.getPhone(),userParam.getLoginPassword());
-                if(rpcResult.getCode() == ResultCode.DUBBO_PARAM_SUCCESS.getCode()){
+                RPCResult rpcResult = userService.registerUser(userParam.getPhone(), userParam.getLoginPassword());
+                if (rpcResult.getCode() == ResultCode.DUBBO_PARAM_SUCCESS.getCode()) {
                     cr = CommonResult.OK();
-                }else{
+                } else {
                     cr.setMessage(rpcResult.getText());
                 }
-            }else{
+            } else {
                 cr.setResult(ResultCode.FRONT_CODE_INVALID);
             }
-        }else{
+        } else {
             cr.setResult(ResultCode.FRONT_REQ_PARAM);
         }
+        return cr;
+    }
+
+    //获取访问token,相当于登录
+    @ApiOperation(value = "访问token")
+    @PostMapping("/v1/token/access")
+    public CommonResult accessToken(@RequestBody UserParam userParam,
+                                    HttpServletRequest request) {
+        CommonResult cr = CommonResult.Fail();
+        if (userParam.checkData()) {
+            //检查验证码是否有效
+            boolean isValid = smsService.checkSmsCodeLoginValid(userParam.getPhone(), userParam.getVerificationCode());
+            if (isValid) {
+                //登录系统，生成token
+                User user = userService.userLogin(userParam.getPhone(), userParam.getLoginPassword());
+                if (user != null) {
+                    //判断是否有token
+                    String accessToken = stringRedisTemplate.boundValueOps(RedisKeyContants.TOKEN_USER + user.getId()).get();
+                    if (StringUtils.isEmpty(accessToken)) {//如果为空，重新生成token
+                        //登录成功，生成token,md5(userId+","+ip+","+登录时间毫秒值)
+                        String src = user.getId() + "," +
+                                request.getRemoteAddr() + "," +
+                                (new Date().getTime());
+                        accessToken = DigestUtils.md5Hex(src);
+                        accessToken = accessToken.toUpperCase();
+                        System.out.println("token=" + accessToken);
+                        //存放到redis中
+                        String tokenKey = RedisKeyContants.TOKEN_ACCESS + accessToken;
+                        BoundHashOperations<String, Object, Object> ops =
+                                stringRedisTemplate.boundHashOps(tokenKey);
+                        Map<String, String> tokenData = new HashMap<>();
+                        tokenData.put("uid", String.valueOf(user.getId()));
+                        tokenData.put("ip", request.getRemoteAddr());
+                        tokenData.put("loginTime", DateUtil.
+                                format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+                        //token存储的数据
+                        ops.putAll(tokenData);
+                        //设置过期时间
+                        ops.expire(60, TimeUnit.MINUTES);
+                        //把userId和token存到redis
+                        stringRedisTemplate.
+                                opsForValue().
+                                set(RedisKeyContants.TOKEN_USER + user.getId(),accessToken,60,TimeUnit.MINUTES);
+                    }
+                    //如果不为空，直接把数据返回到前端
+                    cr = CommonResult.OK();
+                    Map<String, Object> respData = new HashMap<>();
+                    respData.put("uid", user.getId());
+                    respData.put("name", user.getName());
+                    respData.put("phone", user.getPhone());
+                    respData.put("accessToken", accessToken);
+                    cr.setData(respData);
+                }
+            } else {
+                cr.setResult(ResultCode.FRONT_CODE_INVALID);
+            }
+        }
+        return cr;
+    }
+
+    //实名认证
+    @ApiOperation(value = "实名认证")
+    @PostMapping("/v1/user/realname")
+    public CommonResult realName(){
+        CommonResult cr = CommonResult.OK();
+
         return cr;
     }
 }

@@ -62,5 +62,13 @@ public class AppUtil {
         }
         return flag;
     }
+    //判断密码格式是否正确
+    public static Boolean checkLoginPassword(String loginPassword){
+        boolean flag = false;
+        if(loginPassword != null && loginPassword.length()==32){
+            flag = true;
+        }
+        return flag;
+    }
 
 }

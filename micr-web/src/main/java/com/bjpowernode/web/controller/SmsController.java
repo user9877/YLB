@@ -44,4 +44,28 @@ public class SmsController extends BaseController{
         }
         return cr;
     }
+
+    @ApiOperation(value = "登录验证码")
+    @GetMapping("/v1/sms/code/login")
+    public CommonResult sendSmsCodeLogin(String phone){
+        CommonResult cr = CommonResult.Fail();
+        if(AppUtil.checkPhone(phone)){
+            //检查验证码是否可用
+            boolean isExist = smsService.checkSmsCodeLogin(phone);
+            if(isExist){
+                cr.setResult(ResultCode.FRONT_SMS_EXIST);
+            }else{
+                //发送短信
+                boolean handleSms = smsService.sendSmsCodeLogin(phone);
+                if(handleSms){
+                    cr = CommonResult.OK();
+                }else{
+                    cr.setResult(ResultCode.FRONT_SMS_FAIL);
+                }
+            }
+        }else{
+            cr.setResult(ResultCode.FRONT_PHONE_FORMAT);
+        }
+        return cr;
+    }
 }

@@ -51,6 +51,26 @@ public class SmsService {
         return handleSms;
     }
 
+    //处理下发登录验证码短信
+    public boolean sendSmsCodeLogin(String phone){
+        boolean handleSms = false;
+        //登录时短信的内容
+        String random = RandomStringUtils.randomNumeric(6);
+        //String content = jdwxSmsConfig.getRegContent();
+        String content = String.format(jdwxSmsConfig.getLoginContent(), random);
+        System.out.println("登录的短信验证码"+content);
+        if (sendSmsCore(phone,content)) {
+            //短信发送成功，保存到redis,时效为10分钟
+            String key = RedisKeyContants.SMS_CODE_LOGIN+phone;
+            stringRedisTemplate.boundValueOps(RedisKeyContants.SMS_CODE_LOGIN+phone)
+                    .set(random,10, TimeUnit.MINUTES);
+            //查看是否存放成功
+            if (stringRedisTemplate.hasKey(key)) {
+                handleSms = true;
+            }
+        }
+        return handleSms;
+    }
     private boolean sendSmsCore(String phone,String content){
         boolean isSend = false;
         CloseableHttpClient client = HttpClients.createDefault();
@@ -101,9 +121,26 @@ public class SmsService {
         return stringRedisTemplate.hasKey(key);
     }
     //检查注册短信验证码是否有效
+    public boolean checkSmsCodeLogin(String phone) {
+        String key = RedisKeyContants.SMS_CODE_LOGIN+phone;
+        return stringRedisTemplate.hasKey(key);
+    }
+
+
+    //检查注册短信验证码是否有效
     public boolean checkSmsCodeRegisterValid(String phone, String verificationCode) {
         boolean flag = false;
         String key = RedisKeyContants.SMS_CODE_REGISTER+phone;
+        String saveCode = stringRedisTemplate.boundValueOps(key).get();
+        if(verificationCode.equals(saveCode)){
+            flag = true;
+        }
+        return flag;
+    }
+    //检查登录短信验证码是否有效
+    public boolean checkSmsCodeLoginValid(String phone, String verificationCode) {
+        boolean flag = false;
+        String key = RedisKeyContants.SMS_CODE_LOGIN+phone;
         String saveCode = stringRedisTemplate.boundValueOps(key).get();
         if(verificationCode.equals(saveCode)){
             flag = true;

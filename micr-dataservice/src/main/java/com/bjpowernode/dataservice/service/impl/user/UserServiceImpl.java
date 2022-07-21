@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
                 String newPassword = DigestUtils.md5Hex(loginPassword+loginPasswordSalt);
                 User newUser = new User();
                 newUser.setPhone(phone);
-                newUser.setLoginPassword(loginPassword);
+                newUser.setLoginPassword(newPassword);
                 newUser.setAddTime(new Date());
                 userMapper.insertUserReturnId(newUser);
                 //注册account
@@ -75,5 +75,23 @@ public class UserServiceImpl implements UserService {
             }
         }
         return rpcResult;
+    }
+    //用户登录
+    @Override
+    public User userLogin(String phone, String loginPassword) {
+        User user = null;
+        if(AppUtil.checkPhone(phone) && AppUtil.checkLoginPassword(loginPassword)){
+            //二次加密后的密码和注册时一样
+            String newPassword = DigestUtils.md5Hex(loginPassword+loginPasswordSalt);
+            user = userMapper.selectLogin(phone ,newPassword);
+            if(user != null){
+                //更新用户最后登录时间
+                User updateUser = new User();
+                updateUser.setId(user.getId());
+                updateUser.setLastLoginTime(new Date());
+                userMapper.updateByPrimaryKeySelective(updateUser);
+            }
+        }
+        return user;
     }
 }

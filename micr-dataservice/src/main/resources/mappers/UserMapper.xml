@@ -61,6 +61,12 @@
             select LAST_INSERT_ID() as newId
         </selectKey>
     </insert>
+    <!--登录-->
+    <select id="selectLogin" resultType="com.bjpowernode.api.domain.User">
+        select <include refid="Base_Column_List"></include>
+        from u_user
+        where phone = #{phone} and login_password = #{loginPassword}
+    </select>
     <!--自定义结束-->
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select

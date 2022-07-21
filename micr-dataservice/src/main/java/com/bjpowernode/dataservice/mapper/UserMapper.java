@@ -18,5 +18,7 @@ public interface UserMapper {
     User selectByPhone(@Param("phone") String phone);
     //注册用户，同时返回id
     int insertUserReturnId(User newUser);
+
+    User selectLogin(@Param("phone") String phone, @Param("loginPassword") String newPassword);
 }
 

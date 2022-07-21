@@ -17,8 +17,8 @@ public enum ResultCode {
     FRONT_PHONE_FORMAT(1002,"手机号格式不正确"),
     FRONT_SMS_FAIL(1003,"短信发送失败"),
     FRONT_SMS_EXIST(1004,"验证码可以继续使用"),
-
     FRONT_CODE_INVALID(1005,"无效的验证码"),
+    FRONT_TOKEN_INVALID(2999,"登录信息已失效,请重新登录"),
 
     //dubbo消费者和提供者之间业务处理错误，3000<=code<7000
     DUBBO_PARAM_ERROR(3000,"服务参数不正确"),

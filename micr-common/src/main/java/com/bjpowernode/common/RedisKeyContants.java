@@ -20,6 +20,11 @@ public class RedisKeyContants {
     public static final String INVEST_MONEY_RANK = "INVEST:MONEY:RANK";
 
     //注册的短信验证码
-    public static final String SMS_CODE_REGISTER = "SMS_CODE_REGISTER";
+    public static final String SMS_CODE_REGISTER = "SMS:CODE:REGISTER:";
+    //登录验证码
+    public static final String SMS_CODE_LOGIN = "SMS:CODE:LOGIN:";
+
+    public static final String TOKEN_ACCESS = "TOKEN:ACCESS:";
+    public static final String TOKEN_USER = "TOKEN:USER:";
 
 }
