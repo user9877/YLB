@@ -25,7 +25,6 @@ import java.util.Map;
  * Autor:FH
  */
 @RestController
-@CrossOrigin
 @Api(tags = "产品功能")
 public class ProductController extends BaseController{
     private Integer productType;

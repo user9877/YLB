@@ -22,7 +22,6 @@ import java.util.Set;
  * Description:
  * Autor:FH
  */
-@CrossOrigin
 @Api(tags = "投资业务功能")
 @RestController
 public class InvestController extends BaseController {

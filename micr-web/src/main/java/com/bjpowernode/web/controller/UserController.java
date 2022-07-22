@@ -32,7 +32,6 @@ import java.util.concurrent.TimeUnit;
  * Autor:FH
  */
 @Api(tags = "用户登录，注册")
-@CrossOrigin
 @RestController
 public class UserController extends BaseController {
     //注册

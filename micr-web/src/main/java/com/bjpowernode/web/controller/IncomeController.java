@@ -19,7 +19,6 @@ import java.util.List;
  * Autor:FH
  */
 @RestController
-@CrossOrigin
 @Api(tags = "收益服务")
 public class IncomeController extends BaseController{
 

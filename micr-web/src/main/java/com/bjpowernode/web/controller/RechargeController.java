@@ -19,7 +19,6 @@ import java.util.List;
  * Autor:FH
  */
 @Api(tags = "充值服务")
-@CrossOrigin
 @RestController
 public class RechargeController extends BaseController {
 
