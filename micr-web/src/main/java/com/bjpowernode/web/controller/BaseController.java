@@ -1,8 +1,6 @@
 package com.bjpowernode.web.controller;
 
-import com.bjpowernode.api.service.InvestService;
-import com.bjpowernode.api.service.ProductService;
-import com.bjpowernode.api.service.YlbBaseService;
+import com.bjpowernode.api.service.*;
 import com.bjpowernode.api.service.user.UserService;
 import com.bjpowernode.web.service.RealNameService;
 import com.bjpowernode.web.service.SmsService;
@@ -41,6 +39,10 @@ public class BaseController {
     //用户服务
     @DubboReference(interfaceClass = UserService.class,version = "1.0.0")
     protected UserService userService;
-
-
+    //充值服务
+    @DubboReference(interfaceClass = RechargeService.class,version = "1.0.0")
+    protected RechargeService rechargeService;
+    //收益
+    @DubboReference(interfaceClass = IncomeService.class,version = "1.0.0")
+    protected IncomeService incomeService;
 }

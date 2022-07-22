@@ -1,26 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bjpowernode.dataservice.mapper.IncomeMapper">
-  <resultMap id="BaseResultMap" type="com.bjpowernode.api.domain.Income">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="uid" jdbcType="INTEGER" property="uid" />
-    <result column="prod_id" jdbcType="INTEGER" property="prodId" />
-    <result column="bid_id" jdbcType="INTEGER" property="bidId" />
-    <result column="bid_money" jdbcType="DECIMAL" property="bidMoney" />
-    <result column="income_date" jdbcType="DATE" property="incomeDate" />
-    <result column="income_money" jdbcType="DECIMAL" property="incomeMoney" />
-    <result column="income_status" jdbcType="INTEGER" property="incomeStatus" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    id, uid, prod_id, bid_id, bid_money, income_date, income_money, income_status
-  </sql>
+    <resultMap id="BaseResultMap" type="com.bjpowernode.api.domain.Income">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="uid" jdbcType="INTEGER" property="uid"/>
+        <result column="prod_id" jdbcType="INTEGER" property="prodId"/>
+        <result column="bid_id" jdbcType="INTEGER" property="bidId"/>
+        <result column="bid_money" jdbcType="DECIMAL" property="bidMoney"/>
+        <result column="income_date" jdbcType="DATE" property="incomeDate"/>
+        <result column="income_money" jdbcType="DECIMAL" property="incomeMoney"/>
+        <result column="income_status" jdbcType="INTEGER" property="incomeStatus"/>
+    </resultMap>
+    <resultMap id="ProductIncomeResultMap" type="com.bjpowernode.api.model.ProductIncomeModel">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="uid" jdbcType="INTEGER" property="uid"/>
+        <result column="prod_id" jdbcType="INTEGER" property="prodId"/>
+        <result column="bid_id" jdbcType="INTEGER" property="bidId"/>
+        <result column="bid_money" jdbcType="DECIMAL" property="bidMoney"/>
+        <result column="income_date" jdbcType="DATE" property="incomeDate"/>
+        <result column="income_money" jdbcType="DECIMAL" property="incomeMoney"/>
+        <result column="income_status" jdbcType="INTEGER" property="incomeStatus"/>
+        <result column="product_name" jdbcType="VARCHAR" property="productName"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, uid, prod_id, bid_id, bid_money, income_date, income_money, income_status
+    </sql>
+    <sql id="Base_Column_List_Alias">
+        i.id, i.uid,i.prod_id, i.bid_id, i.bid_money, i.income_date, i.income_money, i.income_status
+    </sql>
 
-  <insert id="insert" parameterType="com.bjpowernode.api.domain.Income">
-    insert into b_income_record ( uid, prod_id,
-      bid_id, bid_money, income_date,
-      income_money, income_status)
-    values (#{uid,jdbcType=INTEGER}, #{prodId,jdbcType=INTEGER},
-      #{bidId,jdbcType=INTEGER}, #{bidMoney,jdbcType=DECIMAL}, #{incomeDate,jdbcType=DATE},
-      #{incomeMoney,jdbcType=DECIMAL}, #{incomeStatus,jdbcType=INTEGER})
-  </insert>
+    <insert id="insert" parameterType="com.bjpowernode.api.domain.Income">
+        insert into b_income_record (uid, prod_id,
+                                     bid_id, bid_money, income_date,
+                                     income_money, income_status)
+        values (#{uid,jdbcType=INTEGER}, #{prodId,jdbcType=INTEGER},
+                #{bidId,jdbcType=INTEGER}, #{bidMoney,jdbcType=DECIMAL}, #{incomeDate,jdbcType=DATE},
+                #{incomeMoney,jdbcType=DECIMAL}, #{incomeStatus,jdbcType=INTEGER})
+    </insert>
+    <!--自定义开始-->
+    <!--查询用户收益-->
+    <select id="selectIncomeByUserId" resultMap="ProductIncomeResultMap">
+        select
+        <include refid="Base_Column_List_Alias"/>,
+        p.product_name
+        from
+        b_income_record i
+        join b_product_info p on i.prod_id = p.id
+        where i.uid = #{uid}
+        order by i.income_money desc
+        limit #{offset},#{rows}
+
+    </select>
+    <!--自定义结束-->
 </mapper>

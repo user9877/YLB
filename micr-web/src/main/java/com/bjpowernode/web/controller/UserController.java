@@ -6,9 +6,11 @@ import com.bjpowernode.api.model.UserAccountModel;
 import com.bjpowernode.api.result.RPCResult;
 import com.bjpowernode.common.RedisKeyContants;
 import com.bjpowernode.common.enums.ResultCode;
+import com.bjpowernode.util.AppUtil;
 import com.bjpowernode.web.model.RealNameVO;
 import com.bjpowernode.web.model.UserParam;
 import com.bjpowernode.web.resp.CommonResult;
+import com.bjpowernode.web.resp.view.UserAccountView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -138,6 +140,24 @@ public class UserController extends BaseController {
                 }else{
                     cr.setResult(ResultCode.FRONT_HAS_REALNAME);
                 }
+            }
+        }
+        return cr;
+    }
+
+    //用户中心,用户基本信息
+    @ApiOperation(value = "用户中心,用户基本信息")
+    @GetMapping("/v1/user/center/info")
+    public CommonResult userCenter(@RequestHeader("uid") Integer uid){
+        CommonResult cr = CommonResult.Fail();
+        if(AppUtil.checkuserId(uid)){
+            UserAccountModel userAccountModel = userService.queryAllInfoByUid(uid);
+            if(userAccountModel != null){
+                UserAccountView view = new UserAccountView(userAccountModel);
+                cr = CommonResult.OK();
+                cr.setData(view);
+            }else{
+                cr.setResult(ResultCode.FRONT_USER_NOT_EXIST);
             }
         }
         return cr;

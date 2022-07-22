@@ -12,6 +12,15 @@ import com.bjpowernode.api.domain.BidInfo;
 
 public class ProductBidModel extends BidInfo {
     private String phone;
+    private String productName;
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
 
     public String getPhone() {
         return phone;

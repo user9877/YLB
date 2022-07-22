@@ -9,6 +9,15 @@
         <result column="bid_time" jdbcType="TIMESTAMP" property="bidTime"/>
         <result column="bid_status" jdbcType="INTEGER" property="bidStatus"/>
     </resultMap>
+    <resultMap id="BidResultMap" type="com.bjpowernode.api.model.ProductBidModel">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="prod_id" jdbcType="INTEGER" property="prodId"/>
+        <result column="uid" jdbcType="INTEGER" property="uid"/>
+        <result column="bid_money" jdbcType="DECIMAL" property="bidMoney"/>
+        <result column="bid_time" jdbcType="TIMESTAMP" property="bidTime"/>
+        <result column="bid_status" jdbcType="INTEGER" property="bidStatus"/>
+        <result column="product_name" jdbcType="VARCHAR" property="productName"/>
+    </resultMap>
     <sql id="Base_Column_List">
         id, prod_id, uid, bid_money, bid_time, bid_status
     </sql>
@@ -24,6 +33,24 @@
         where b.prod_id = #{productId}
         order by b.bid_time desc
         limit #{offset},#{rows}
+    </select>
+    <!--查询某个用户的投资记录-->
+    <select id="selectBidsByUserId" resultMap="BidResultMap">
+        SELECT
+            b.id,
+            p.product_name,
+            b.bid_money,
+            b.bid_time,
+            b.bid_status
+        FROM
+            b_bid_info b
+                INNER JOIN b_product_info p ON b.prod_id = p.id
+        WHERE
+            b.uid = #{uid}
+          AND b.bid_status = 1
+        ORDER BY
+            b.id DESC
+        LIMIT #{offset},#{rows}
     </select>
     <!--自定义结束-->
     <insert id="insertSelective" parameterType="com.bjpowernode.api.domain.BidInfo">

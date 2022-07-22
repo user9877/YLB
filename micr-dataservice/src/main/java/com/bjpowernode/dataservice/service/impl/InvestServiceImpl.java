@@ -32,4 +32,16 @@ public class InvestServiceImpl implements InvestService {
         }
         return bidModelList;
     }
+    //查询某个用户的投资记录
+    @Override
+    public List<ProductBidModel> queryBidByUserId(Integer uid, Integer pageNo, Integer pageSize) {
+        List<ProductBidModel> bidList = new ArrayList<>();
+        if(AppUtil.checkProductId(uid)){
+            pageNo = AppUtil.defaultPageNo(pageNo);
+            pageSize = AppUtil.defaultPageSize(pageSize);
+            int offset = (pageNo -1)*pageSize;
+            bidList = bidInfoMapper.selectBidsByUserId(uid,offset,pageSize);
+        }
+        return bidList;
+    }
 }

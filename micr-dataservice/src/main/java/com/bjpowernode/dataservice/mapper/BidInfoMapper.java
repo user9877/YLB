@@ -13,4 +13,6 @@ public interface BidInfoMapper {
     BigDecimal selectSumAllBidMoney();
     //查询某个产品最近的投资记录
     List<ProductBidModel> selectBidsByProductId(@Param("productId") Integer productId, @Param("offset") int offset, @Param("rows") Integer rows);
+    //查询某个用户的投资记录
+    List<ProductBidModel> selectBidsByUserId(@Param("uid") Integer uid, @Param("offset") int offset, @Param("rows") Integer rows);
 }

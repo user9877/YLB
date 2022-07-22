@@ -21,6 +21,8 @@ public enum ResultCode {
     FRONT_HAS_REALNAME(1006,"不能重复认证"),
     FRONT_REALNAME_FAIL(1007,"认证失败"),
 
+    FRONT_USER_NOT_EXIST(1008,"用户信息不存在"),
+
     FRONT_TOKEN_INVALID(2999,"登录信息已失效,请重新登录"),
 
     //dubbo消费者和提供者之间业务处理错误，3000<=code<7000
