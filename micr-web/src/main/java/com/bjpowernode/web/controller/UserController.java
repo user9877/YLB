@@ -161,4 +161,26 @@ public class UserController extends BaseController {
         }
         return cr;
     }
+
+    //退出
+    @GetMapping("/v1/user/logout")
+    public CommonResult userLogout(@RequestHeader("uid") Integer uid,
+                                   @RequestHeader("Authorization") String authorization){
+        CommonResult cr = CommonResult.Fail();
+        if(StringUtils.isNotBlank(authorization) && authorization.contains("Bearer")){
+            //从请求头中取出token
+            String token = authorization.substring(7);
+            if(StringUtils.isNotBlank(token)){
+                String key = RedisKeyContants.TOKEN_ACCESS + token;
+                //删除redis中的token
+                Boolean deleteAccessToken = stringRedisTemplate.delete(key);
+                String userIdKey = RedisKeyContants.TOKEN_USER + uid;
+                Boolean deleteUserToken = stringRedisTemplate.delete(userIdKey);
+                if(deleteAccessToken && deleteUserToken){
+                    cr = CommonResult.OK();
+                }
+            }
+        }
+        return cr;
+    }
 }
