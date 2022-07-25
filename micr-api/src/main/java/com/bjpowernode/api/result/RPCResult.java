@@ -1,5 +1,7 @@
 package com.bjpowernode.api.result;
 
+import com.bjpowernode.common.enums.ResultCode;
+
 import java.io.Serializable;
 
 /**
@@ -15,6 +17,11 @@ public class RPCResult implements Serializable {
     private int code;
     private String text;
     private Object data;
+
+    public void setResultCode(ResultCode resultCode) {
+        this.code = resultCode.getCode();
+        this.text = resultCode.getText();
+    }
 
     public int getCode() {
         return code;

@@ -22,4 +22,7 @@ public interface ProductMapper {
 
     Product selectProductById(@Param("productId") Integer productId);
 
+    Product selectProductByIdForUpdate(@Param("productId") Integer productId);
+
+    int updateLeftProductMoney(@Param("productId") Integer productId, @Param("investMoney") BigDecimal investMoney);
 }

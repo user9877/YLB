@@ -25,6 +25,13 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+
+        <!--common依赖-->
+        <dependency>
+            <groupId>com.bjpowernode</groupId>
+            <artifactId>micr-common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
 </project>

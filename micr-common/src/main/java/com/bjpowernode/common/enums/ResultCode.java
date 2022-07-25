@@ -29,6 +29,9 @@ public enum ResultCode {
     DUBBO_PARAM_ERROR(3000,"服务参数不正确"),
     DUBBO_PARAM_SUCCESS(3001,"远程调用成功"),
     DUBBO_PHONE_EXITS(3002,"手机号已被注册"),
+    DUBBO_ACCOUNT_MONEY(3003,"余额不足"),
+    DUBBO_PRODUCT_NULL(3004,"产品已售罄"),
+    DUBBO_INVEST_MONEY_ERR(3005,"投资金额不正确"),
     ;
     private Integer code;
     private String text;

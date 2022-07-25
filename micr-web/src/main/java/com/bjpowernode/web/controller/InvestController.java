@@ -1,8 +1,12 @@
 package com.bjpowernode.web.controller;
 
 import com.bjpowernode.api.model.ProductBidModel;
+import com.bjpowernode.api.model.UserAccountModel;
+import com.bjpowernode.api.result.RPCResult;
 import com.bjpowernode.common.RedisKeyContants;
+import com.bjpowernode.common.enums.ResultCode;
 import com.bjpowernode.util.AppUtil;
+import com.bjpowernode.web.model.InvestVO;
 import com.bjpowernode.web.resp.CommonResult;
 import com.bjpowernode.web.resp.view.ProductBidView;
 import com.bjpowernode.web.resp.view.RankView;
@@ -67,5 +71,31 @@ public class InvestController extends BaseController {
             cr.setData(viewList);
         }
         return cr;
+    }
+
+    /*投资理财产品*/
+    @ApiOperation(value = "投资理财产品")
+    @PostMapping("/v1/invest/product")
+    public CommonResult investProduct(@RequestBody InvestVO investVO,
+                                      @RequestHeader("uid") Integer uid){
+        CommonResult result = CommonResult.Fail();
+        if(AppUtil.checkuserId(uid) && AppUtil.checkProductId(investVO.getProductId())
+        && AppUtil.checkInvestMoney(investVO.getInvestMoney())){
+            //调用数据服务
+            RPCResult rpcResult = investService.investProduct(uid,investVO.getProductId(),investVO.getInvestMoney());
+            if(rpcResult.getCode() == ResultCode.DUBBO_PARAM_SUCCESS.getCode()){
+                result = CommonResult.OK();
+                //更新投资排行榜
+                UserAccountModel userAccount = userService.queryAllInfoByUid(uid);
+                stringRedisTemplate.boundZSetOps(RedisKeyContants.INVEST_MONEY_RANK).incrementScore(userAccount.getPhone(),investVO.getInvestMoney().doubleValue());
+            }else{
+                result.setCode(result.getCode());
+                result.setMessage(rpcResult.getText());
+            }
+
+
+
+        }
+        return result;
     }
 }

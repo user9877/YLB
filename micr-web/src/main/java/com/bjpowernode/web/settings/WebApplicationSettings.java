@@ -25,7 +25,7 @@ public class WebApplicationSettings implements WebMvcConfigurer {
         //创建拦截器对象
         TokenInterceptors tokenInterceptors = new TokenInterceptors(stringRedisTemplate);
         //添加拦截器对象
-        String[] addPath = {"/v1/user/realname"};
+        String[] addPath = {"/v1/user/realname","/v1/user/logout","/v1/invest/product"};
         registry.addInterceptor(tokenInterceptors).addPathPatterns(addPath);
     }
     //全局跨域处理

@@ -1,5 +1,6 @@
 package com.bjpowernode.util;
 
+import java.math.BigDecimal;
 import java.util.regex.Pattern;
 
 /**
@@ -18,6 +19,13 @@ public class AppUtil {
             if(productType > -1 && productType < 3){
                 flag = true;
             }
+        }
+        return flag;
+    }
+ public static boolean checkInvestMoney(BigDecimal investMoney){
+        boolean flag = false;
+        if (investMoney != null && investMoney.doubleValue() >= 100 && investMoney.doubleValue() % 100 == 0) {
+                flag = true;
         }
         return flag;
     }
@@ -69,6 +77,14 @@ public class AppUtil {
             flag = true;
         }
         return flag;
+    }
+    //判断两个BigDecimal类型的数的大小
+    public static Boolean judgeBigDecimal(BigDecimal n1,BigDecimal n2){
+        if(n1 == null && n2 == null){
+           throw new RuntimeException("参数不能为空");
+        }
+
+        return n1.compareTo(n2) >=0;
     }
 
 }

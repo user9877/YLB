@@ -57,6 +57,19 @@
     where
         id = #{productId}
   </select>
+  <!--按主键查询，上锁-->
+  <select id="selectProductByIdForUpdate" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"></include>
+    from b_product_info
+    where id = #{productId}
+    for update
+  </select>
+  <!--更新该产品剩余可购买金额-->
+  <update id="updateLeftProductMoney">
+    update b_product_info
+    set left_product_money = left_product_money - #{investMoney}
+    where id = #{productId} and ((left_product_money - #{investMoney}) > 0)
+  </update>
   <!--自定义结束-->
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
@@ -111,5 +124,6 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
+
 
 </mapper>

@@ -26,7 +26,7 @@
       <module name="micr-api" options="-parameters" />
       <module name="micr-common" options="-parameters" />
       <module name="micr-dataservice" options="-parameters" />
-      <module name="micr-parent" options="-parameters" />
+      <module name="micr-parent" options="" />
       <module name="micr-web" options="-parameters" />
       <module name="ready-03-swagger" options="-parameters" />
       <module name="ready-04-mybatis-nxgc" options="-parameters" />
