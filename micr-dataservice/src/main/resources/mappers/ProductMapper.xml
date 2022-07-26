@@ -70,6 +70,14 @@
     set left_product_money = left_product_money - #{investMoney}
     where id = #{productId} and ((left_product_money - #{investMoney}) > 0)
   </update>
+<!--满标理财产品-->
+  <select id="selectSelledProducts" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"></include>
+    from b_product_info
+    where product_status = 1 and
+          product_full_time &gt;= #{beginTime} and product_full_time &lt; #{endTime}
+    order by id
+  </select>
   <!--自定义结束-->
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
@@ -77,6 +85,7 @@
     from b_product_info
     where id = #{id,jdbcType=INTEGER}
   </select>
+
 
 
     <update id="updateByPrimaryKeySelective" parameterType="com.bjpowernode.api.domain.Product">

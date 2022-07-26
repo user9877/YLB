@@ -11,4 +11,6 @@ public interface FinanceAccountMapper {
     FinanceAccount selectByUidForUpdate(@Param("uid") Integer uid);
     //购买理财产品，扣除金额
     int updateAvailableMoney(@Param("uid") Integer uid, @Param("investMoney") BigDecimal investMoney);
+
+    int updateAvailableMoneyByIncomeBack(@Param("uid") Integer uid, @Param("bidMoney") BigDecimal bidMoney, @Param("incomeMoney") BigDecimal incomeMoney);
 }

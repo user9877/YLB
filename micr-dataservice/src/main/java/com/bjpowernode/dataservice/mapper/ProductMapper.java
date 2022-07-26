@@ -4,6 +4,7 @@ import com.bjpowernode.api.domain.Product;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 public interface ProductMapper {
@@ -25,4 +26,6 @@ public interface ProductMapper {
     Product selectProductByIdForUpdate(@Param("productId") Integer productId);
 
     int updateLeftProductMoney(@Param("productId") Integer productId, @Param("investMoney") BigDecimal investMoney);
+    //满标理财产品
+    List<Product> selectSelledProducts(@Param("beginTime") Date beginTime, @Param("endTime") Date endTime);
 }

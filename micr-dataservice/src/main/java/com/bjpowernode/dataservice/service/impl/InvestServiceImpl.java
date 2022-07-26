@@ -58,7 +58,7 @@ public class InvestServiceImpl implements InvestService {
         }
         return bidList;
     }
-
+    //投资
     @Override
     public RPCResult investProduct(Integer uid, Integer productId, BigDecimal investMoney) {
         RPCResult result = new RPCResult();
@@ -115,7 +115,6 @@ public class InvestServiceImpl implements InvestService {
                 }else{
                     result.setResultCode(ResultCode.DUBBO_PRODUCT_NULL);
                 }
-
             }else{
                 result.setResultCode(ResultCode.DUBBO_ACCOUNT_MONEY);
             }

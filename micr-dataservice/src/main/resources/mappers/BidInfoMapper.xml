@@ -52,6 +52,12 @@
             b.id DESC
         LIMIT #{offset},#{rows}
     </select>
+    <select id="selectByProductId" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"></include>
+        from b_bid_info
+        where prod_id = #{productId}
+        order by id
+    </select>
     <!--自定义结束-->
     <insert id="insertSelective" parameterType="com.bjpowernode.api.domain.BidInfo">
         insert into b_bid_info

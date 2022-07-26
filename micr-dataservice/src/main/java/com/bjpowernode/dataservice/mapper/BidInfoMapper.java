@@ -15,4 +15,6 @@ public interface BidInfoMapper {
     List<ProductBidModel> selectBidsByProductId(@Param("productId") Integer productId, @Param("offset") int offset, @Param("rows") Integer rows);
     //查询某个用户的投资记录
     List<ProductBidModel> selectBidsByUserId(@Param("uid") Integer uid, @Param("offset") int offset, @Param("rows") Integer rows);
+    //根据产品id查询产品投资记录
+    List<BidInfo> selectByProductId(@Param("productId") Integer productId);
 }

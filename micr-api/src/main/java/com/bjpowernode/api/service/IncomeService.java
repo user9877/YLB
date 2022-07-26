@@ -15,4 +15,9 @@ import java.util.List;
 public interface IncomeService {
     //查询用户收益
     List<ProductIncomeModel> queryIncomeByUid(Integer uid, Integer pageNo, Integer pageSize);
+
+    //生成收益计划
+    void generateIncomePlan();
+    //收益返还
+    void generateIncomeBack();
 }

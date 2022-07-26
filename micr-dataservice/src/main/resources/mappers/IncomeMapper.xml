@@ -37,6 +37,7 @@
                 #{bidId,jdbcType=INTEGER}, #{bidMoney,jdbcType=DECIMAL}, #{incomeDate,jdbcType=DATE},
                 #{incomeMoney,jdbcType=DECIMAL}, #{incomeStatus,jdbcType=INTEGER})
     </insert>
+
     <!--自定义开始-->
     <!--查询用户收益-->
     <select id="selectIncomeByUserId" resultMap="ProductIncomeResultMap">
@@ -48,8 +49,20 @@
         join b_product_info p on i.prod_id = p.id
         where i.uid = #{uid}
         order by i.income_money desc
-        limit #{offset},#{rows}
+        LIMIT #{offset},#{rows}
 
     </select>
+    <select id="selectExpiredIncome" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"></include>
+        from b_income_record
+        where income_date = DATE_SUB(CURRENT_DATE,INTERVAL 1 DAY)
+            and income_status = 0
+        order by id;
+    </select>
+    <!--更新收益表状态-->
+    <update id="updateStatus">
+        update b_income_record set income_status = #{incomeStatusHasBack}
+        where id = #{id}
+    </update>
     <!--自定义结束-->
 </mapper>

@@ -12,12 +12,14 @@ import com.bjpowernode.web.resp.view.ProductBidView;
 import com.bjpowernode.web.resp.view.RankView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.data.redis.core.BoundZSetOperations;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * ClassName:InvestController
@@ -35,7 +37,9 @@ public class InvestController extends BaseController {
     public CommonResult investMoneyRank() {
         CommonResult cr = CommonResult.OK();
         //从redis获取数据
-        Set<ZSetOperations.TypedTuple<String>> zsets = stringRedisTemplate.boundZSetOps(RedisKeyContants.INVEST_MONEY_RANK).reverseRangeWithScores(0, 2);
+        BoundZSetOperations<String, String> ops = stringRedisTemplate.boundZSetOps(RedisKeyContants.INVEST_MONEY_RANK);
+        Set<ZSetOperations.TypedTuple<String>> zsets =ops.reverseRangeWithScores(0, 2);
+        ops.expire(60*24*7, TimeUnit.MINUTES);
         List<RankView> rankViewList = new ArrayList<>();
         //遍历集合
         int index = 0;
@@ -92,10 +96,9 @@ public class InvestController extends BaseController {
                 result.setCode(result.getCode());
                 result.setMessage(rpcResult.getText());
             }
-
-
-
         }
         return result;
     }
+
+
 }

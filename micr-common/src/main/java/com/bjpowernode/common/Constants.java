@@ -28,5 +28,10 @@ public class Constants {
     //投资成功
     public static final int BID_STATUS_SUCC_1 = 1;
 
+    //收益记录状态
+    //未返还
+    public static final int INCOME_STATUS_NOT_BACK = 0;
+    //已返还
+    public static final int INCOME_STATUS_HAS_BACK = 1;
 
 }
