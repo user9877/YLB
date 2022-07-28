@@ -48,7 +48,7 @@
         b_income_record i
         join b_product_info p on i.prod_id = p.id
         where i.uid = #{uid}
-        order by i.income_money desc
+        order by i.income_date desc
         LIMIT #{offset},#{rows}
 
     </select>

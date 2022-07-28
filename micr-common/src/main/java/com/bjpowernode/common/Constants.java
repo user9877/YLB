@@ -34,4 +34,12 @@ public class Constants {
     //已返还
     public static final int INCOME_STATUS_HAS_BACK = 1;
 
+    //充值状态
+    //充值中
+    public static final int RECHARGE_STATUS_0 = 0;
+    //充值成功
+    public static final int RECHARGE_STATUS_SUCCESS = 1;
+    //充值失败
+    public static final int RECHARGE_STATUS_FAIL = 2;
+
 }

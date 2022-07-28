@@ -26,5 +26,10 @@ public class RedisKeyContants {
 
     public static final String TOKEN_ACCESS = "TOKEN:ACCESS:";
     public static final String TOKEN_USER = "TOKEN:USER:";
+    //快钱订单号的自增值
+    public static final String RECHARGE_KQ_SEQ = "RECHARGE:KQ:SEQ";
+    //订单号
+    public static final String RECHARGE_ORDER_ID = "RECHARGE:ORDER:ID";
+
 
 }

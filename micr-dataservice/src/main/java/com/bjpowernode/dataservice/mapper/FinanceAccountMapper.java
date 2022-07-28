@@ -13,4 +13,6 @@ public interface FinanceAccountMapper {
     int updateAvailableMoney(@Param("uid") Integer uid, @Param("investMoney") BigDecimal investMoney);
 
     int updateAvailableMoneyByIncomeBack(@Param("uid") Integer uid, @Param("bidMoney") BigDecimal bidMoney, @Param("incomeMoney") BigDecimal incomeMoney);
+
+    int updateAvailableMoneyByRecharge(@Param("uid") Integer uid, @Param("rechargeMoney") BigDecimal rechargeMoney);
 }

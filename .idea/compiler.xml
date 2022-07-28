@@ -10,6 +10,7 @@
         <module name="micr-web" />
         <module name="micr-api" />
         <module name="micr-dataservice" />
+        <module name="micr-pay" />
         <module name="micr-common" />
         <module name="micr-task" />
       </profile>
@@ -27,7 +28,8 @@
       <module name="micr-api" options="-parameters" />
       <module name="micr-common" options="-parameters" />
       <module name="micr-dataservice" options="-parameters" />
-      <module name="micr-parent" options="-parameters" />
+      <module name="micr-parent" options="" />
+      <module name="micr-pay" options="-parameters" />
       <module name="micr-task" options="-parameters" />
       <module name="micr-web" options="-parameters" />
       <module name="ready-03-swagger" options="-parameters" />

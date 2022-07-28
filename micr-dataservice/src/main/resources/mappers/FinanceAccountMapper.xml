@@ -35,6 +35,11 @@
         update u_finance_account set available_money = available_money+#{incomeMoney}+#{bidMoney}
         where uid = #{uid}
     </update>
+    <update id="updateAvailableMoneyByRecharge">
+        update u_finance_account
+        set available_money = available_money + #{rechargeMoney}
+        where uid = #{uid}
+    </update>
     <!--自定义结束-->
 
 </mapper>

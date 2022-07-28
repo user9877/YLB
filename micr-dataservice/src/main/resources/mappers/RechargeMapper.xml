@@ -24,6 +24,7 @@
                 #{rechargeTime,jdbcType=TIMESTAMP},
                 #{rechargeDesc,jdbcType=VARCHAR}, #{channel,jdbcType=VARCHAR})
     </insert>
+
     <!--自定义开始-->
     <select id="selectByUid" resultMap="BaseResultMap">
         select
@@ -33,5 +34,17 @@
         order by recharge_time desc
         limit #{offset},#{rows}
     </select>
+
+    <select id="selectByOrderId" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"></include>
+        from b_recharge_record
+        where recharge_no = #{orderId} for update
+    </select>
+
+    <update id="updateStatus">
+        update b_recharge_record
+        set recharge_status = #{rechargeStatusSuccess}
+        where id = #{id}
+    </update>
     <!--自定义结束-->
 </mapper>

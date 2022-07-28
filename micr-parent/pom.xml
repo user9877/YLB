@@ -23,6 +23,7 @@
         <module>../micr-web</module>
         <module>../micr-common</module>
         <module>../micr-task</module>
+        <module>../micr-pay</module>
     </modules>
 
     <properties>

@@ -32,6 +32,11 @@ public enum ResultCode {
     DUBBO_ACCOUNT_MONEY(3003,"余额不足"),
     DUBBO_PRODUCT_NULL(3004,"产品已售罄"),
     DUBBO_INVEST_MONEY_ERR(3005,"投资金额不正确"),
+    DUBBO_RECHARGE_RECORD_NOON(3006,"订单充值记录不存在"),
+    DUBBO_RECHARGE_OVER(3007,"已经处理完毕"),
+    DUBBO_RECHARGE_MONEY_ERR(3008,"充值金额错误"),
+    DUBBO_RECHARGE_SUCCESS(3009,"充值成功"),
+    DUBBO_RECHARGE_FAIL(3010,"充值失败"),
     ;
     private Integer code;
     private String text;
