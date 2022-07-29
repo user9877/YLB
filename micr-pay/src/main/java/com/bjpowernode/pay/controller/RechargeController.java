@@ -57,6 +57,6 @@ public class RechargeController {
     @ResponseBody
     public String kqQuery(){
         kqRechargeService.doQuery();
-        return null;
+        return "调用查询接口";
     }
 }

@@ -312,6 +312,9 @@ public class KQRechargeService {
                         String respPayResult = order.getString("payResult");
                         RPCResult result = rechargeService.handleRechargeNofity(respOrderId,respPayResult,respPayAmount);
                         System.out.println("查询支付的处理结果："+result.getText());
+                    }else{
+                        RPCResult result = rechargeService.handleRechargeNofity(orderId,"11","0");
+                        System.out.println("查询支付的处理结果："+result.getText());
                     }
                 }
             } catch (Exception e) {

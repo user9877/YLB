@@ -84,6 +84,11 @@ public class RechargeServiceImpl implements RechargeService {
                         result.setResultCode(ResultCode.DUBBO_RECHARGE_FAIL);
                     }
                 }else{
+                    //更新充值记录的状态
+                    rows = rechargeMapper.updateStatus(recharge.getId(),Constants.RECHARGE_STATUS_FAIL);
+                    if(rows < 1){
+                        throw new RuntimeException("充值状态2更新失败");
+                    }
                     result.setResultCode(ResultCode.DUBBO_RECHARGE_MONEY_ERR);
                 }
             }else{
