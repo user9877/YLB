@@ -1,5 +1,8 @@
 package com.bjpowernode.pay.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.bjpowernode.api.domain.Recharge;
 import com.bjpowernode.api.model.UserAccountModel;
 import com.bjpowernode.api.result.RPCResult;
@@ -7,17 +10,21 @@ import com.bjpowernode.api.service.RechargeService;
 import com.bjpowernode.api.service.user.UserService;
 import com.bjpowernode.common.Constants;
 import com.bjpowernode.common.RedisKeyContants;
+import com.bjpowernode.pay.util.HttpUtil;
 import com.bjpowernode.pay.util.Pkipair;
 import com.bjpowernode.pay.util.RechargeUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * ClassName:KQRechargeService
@@ -225,5 +232,91 @@ public class KQRechargeService {
 
     public void addOrderIdToRedis(String orderId) {
         stringRedisTemplate.boundZSetOps(RedisKeyContants.RECHARGE_ORDER_ID).add(orderId,new Date().getTime());
+    }
+    //调用快钱查询接口
+    public void doQuery() {
+        //1.从redis获取没有处理完成的订单号
+        Set<String> orderIds = stringRedisTemplate.boundZSetOps(RedisKeyContants.RECHARGE_ORDER_ID).
+                range(0, -1);
+        //每个orderId都执行查询
+        orderIds.forEach(orderId -> {
+            kqQuery(orderId);
+            //删除处理过的订单号
+            stringRedisTemplate.boundZSetOps(RedisKeyContants.RECHARGE_ORDER_ID).remove(orderId);
+        });
+
+    }
+    private void kqQuery(String orderId) {
+        /**
+         * 支付查询demo
+         */
+            Map<String, Object> request = new HashMap<String, Object>();
+            //固定值：1代表UTF-8;
+            String inputCharset = "1";
+            //固定值：v2.0 必填
+            String version = "v2.0";
+            //1代表Md5，2 代表PKI加密方式  必填
+            String signType = "2";
+            //人民币账号 membcode+01  必填
+            String merchantAcctId = "1001214035601";
+            //固定值：0 按商户订单号单笔查询，1 按交易结束时间批量查询必填
+            String queryType = "0";
+            //固定值：1	代表简单查询 必填
+            String queryMode = "1";
+            //数字串，格式为：年[4 位]月[2 位]日[2 位]时[2 位]分[2 位]秒[2位]，例如：20071117020101
+            String startTime = "";//20200525000000
+            ////数字串，格式为：年[4 位]月[2 位]日[2 位]时[2 位]分[2 位]秒[2位]，例如：20071117020101
+            String endTime = "";    //	20200527180000
+            String requestPage = "";
+            String key = "27YKWKBKHT2IZSQ4";//XIXMFISFG7RGDKQN
+            request.put("inputCharset", inputCharset);
+            request.put("version", version);
+            request.put("signType", signType);
+            request.put("merchantAcctId", merchantAcctId);
+            request.put("queryType", queryType);
+            request.put("queryMode", queryMode);
+            request.put("startTime", startTime);
+            request.put("endTime", endTime);
+            request.put("requestPage", requestPage);
+            request.put("orderId", orderId);
+
+            String message = "";
+            message = RechargeUtil.appendParam(message, "inputCharset", inputCharset);
+            message = RechargeUtil.appendParam(message, "version", version);
+            message = RechargeUtil.appendParam(message, "signType", signType);
+            message = RechargeUtil.appendParam(message, "merchantAcctId", merchantAcctId);
+            message = RechargeUtil.appendParam(message, "queryType", queryType);
+            message = RechargeUtil.appendParam(message, "queryMode", queryMode);
+            message = RechargeUtil.appendParam(message, "startTime", startTime);
+            message = RechargeUtil.appendParam(message, "endTime", endTime);
+            message = RechargeUtil.appendParam(message, "requestPage", requestPage);
+            message = RechargeUtil.appendParam(message, "orderId", orderId);
+            message = RechargeUtil.appendParam(message, "key", key);
+            Pkipair pki = new Pkipair();
+            String sign = pki.signMsg(message);
+            request.put("signMsg", sign);
+            //sandbox提交地址
+            String reqUrl = "https://sandbox.99bill.com/gatewayapi/gatewayOrderQuery.do";
+            String response = "";
+            try {
+                response = HttpUtil.doPostJsonRequestByHttps(JSON.toJSONString(request), reqUrl, 3000, 8000);
+                System.out.println("返回json串===" + response);
+                if(StringUtils.isNotBlank(response)){
+                    //
+                    JSONObject levelone = JSONObject.parseObject(response);
+                    JSONArray orderDetail = levelone.getJSONArray("orderDetail");
+                    if(orderDetail != null){
+                        JSONObject order = orderDetail.getJSONObject(0);
+                        String respOrderId = order.getString("orderId");
+                        String respPayAmount = order.getString("payAmount");
+                        String respPayResult = order.getString("payResult");
+                        RPCResult result = rechargeService.handleRechargeNofity(respOrderId,respPayResult,respPayAmount);
+                        System.out.println("查询支付的处理结果："+result.getText());
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return;
+            }
     }
 }

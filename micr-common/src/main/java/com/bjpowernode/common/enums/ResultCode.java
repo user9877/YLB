@@ -22,6 +22,9 @@ public enum ResultCode {
     FRONT_REALNAME_FAIL(1007,"认证失败"),
 
     FRONT_USER_NOT_EXIST(1008,"用户信息不存在"),
+    FRONT_EXCEP_ARITH(1009,"计算的数据错误"),
+    FRONT_EXCEP_NULL(1010,"数据无效"),
+    FRONT_EXCEP_OTHER(1011,"未知的错误"),
 
     FRONT_TOKEN_INVALID(2999,"登录信息已失效,请重新登录"),
 

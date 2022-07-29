@@ -24,7 +24,7 @@ public class Pkipair {
             KeyStore ks = KeyStore.getInstance("PKCS12");
             //商户私钥文件
             String file = Pkipair.class.getResource("10012140356.pfx").getPath().replaceAll("%20", " ");
-            System.out.println(file);
+            //System.out.println(file);
 
             FileInputStream ksfis = new FileInputStream(file);
 
@@ -42,11 +42,12 @@ public class Pkipair {
             base64 = encoder.encode(signature.sign());
 
         } catch(FileNotFoundException e){
+            e.printStackTrace();
             System.out.println("123");
         }catch (Exception ex) {
             ex.printStackTrace();
         }
-        System.out.println("test = "+base64);
+        //System.out.println("test = "+base64);
         return base64;
     }
     public boolean enCodeByCer( String val, String msg) {

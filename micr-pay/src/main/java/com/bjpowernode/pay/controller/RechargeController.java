@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -24,6 +25,7 @@ public class RechargeController {
     @Resource
     private KQRechargeService kqRechargeService;
 
+    //支付接口：生成订单记录,生成表单信息发送给快钱的表单验证界面
     @GetMapping("/recharge/entry")
     public String receFromFrontRecharge(@RequestParam Integer uid,
                                         @RequestParam BigDecimal rechargeMoney,
@@ -37,7 +39,9 @@ public class RechargeController {
                 if(user != null){
                     //生成参数，快钱支付接口所需参数
                     Map<String, String> from = kqRechargeService.generateFrom(uid, user.getPhone(), rechargeMoney);
+                    //生成订单记录
                     kqRechargeService.addRecharge(uid,from.get("orderId"),rechargeMoney,channel);
+                    //把订单号添加到redis
                     kqRechargeService.addOrderIdToRedis(from.get("orderId"));
                     model.addAllAttributes(from);
                     view = "kqForm";
@@ -47,5 +51,12 @@ public class RechargeController {
            e.printStackTrace();
         }
         return view;
+    }
+    //支付结果查询接口
+    @GetMapping("/recharge/query")
+    @ResponseBody
+    public String kqQuery(){
+        kqRechargeService.doQuery();
+        return null;
     }
 }

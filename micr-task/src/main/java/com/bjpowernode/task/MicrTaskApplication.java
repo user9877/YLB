@@ -16,7 +16,7 @@ public class MicrTaskApplication {
         ApplicationContext ctx = SpringApplication.run(MicrTaskApplication.class, args);
         TaskManager tm = (TaskManager) ctx.getBean("taskManager");
         //tm.taskIncomePlan();
-        tm.taskIncomeBack();
+        tm.taskRechargeResult();
     }
 
 }

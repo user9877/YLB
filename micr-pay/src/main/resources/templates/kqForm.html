@@ -5,7 +5,6 @@
     <title>快钱支付表单页面</title>
 </head>
 <body>
-<h3>提交请求给快钱</h3>
 <form name="kqPay" action="https://sandbox.99bill.com/gateway/recvMerchantInfoAction.htm" method="get">
     <input type="hidden" name="inputCharset" th:value="${inputCharset}" />
     <input type="hidden" name="pageUrl" th:value="${pageUrl}" />
@@ -40,6 +39,7 @@
     <!--<input type="submit" name="submit" th:value="提交到快钱">-->
 </form>
 <script>
+    //表单信息验证通过后自动提交到快钱
     document.forms[0].submit();
 </script>
 </body>
