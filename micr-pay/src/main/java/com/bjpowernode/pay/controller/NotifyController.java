@@ -28,7 +28,7 @@ public class NotifyController {
         }catch (Exception e){
             e.printStackTrace();
         }finally {
-            return "<result>1</result><redirecturl>http://localhost:8080<redirecturl>";
+            return "<result>1</result><redirecturl>https://localhost:8080/<redirecturl>";
         }
     }
 }

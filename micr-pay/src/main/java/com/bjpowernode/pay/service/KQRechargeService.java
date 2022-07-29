@@ -44,7 +44,7 @@ public class KQRechargeService {
         String pageUrl = "";
         //服务器接收支付结果的后台地址，该参数务必填写，不能为空。
         //外网地址才可以
-        String bgUrl = "http://localhost:9000/pay/recharge/notify/kq";
+        String bgUrl = "https://t566557q39.zicp.fun/pay/recharge/notify/kq";
         //网关版本，固定值：v2.0,该参数必填。
         String version =  "v2.0";
         //语言种类，1代表中文显示，2代表英文显示。默认为1,该参数必填。
@@ -125,7 +125,6 @@ public class KQRechargeService {
         signMsgVal = RechargeUtil.appendParam(signMsgVal, "bankId", bankId,from);
         signMsgVal = RechargeUtil.appendParam(signMsgVal, "redoFlag", redoFlag,from);
         signMsgVal = RechargeUtil.appendParam(signMsgVal, "pid", pid,from);
-        System.out.println(signMsgVal);
         Pkipair pki = new Pkipair();
         //生成签名串
         String signMsg = pki.signMsg(signMsgVal);
@@ -186,7 +185,7 @@ public class KQRechargeService {
         merchantSignMsgVal = RechargeUtil.appendParam(merchantSignMsgVal, "errCode",errCode);
         Pkipair pki = new Pkipair();
         boolean flag = pki.enCodeByCer(merchantSignMsgVal, signMsg);
-        flag = true;
+        //flag = true;
         if(flag){
             //验证商家号
             if("1001214035601".equals(merchantAcctId)){

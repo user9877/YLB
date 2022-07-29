@@ -172,10 +172,17 @@ public class UserController extends BaseController {
             String token = authorization.substring(7);
             if(StringUtils.isNotBlank(token)){
                 String key = RedisKeyContants.TOKEN_ACCESS + token;
+                Boolean deleteAccessToken = true;
                 //删除redis中的token
-                Boolean deleteAccessToken = stringRedisTemplate.delete(key);
+                if(stringRedisTemplate.hasKey(key)){
+                     deleteAccessToken = stringRedisTemplate.delete(key);
+                }
                 String userIdKey = RedisKeyContants.TOKEN_USER + uid;
-                Boolean deleteUserToken = stringRedisTemplate.delete(userIdKey);
+                Boolean deleteUserToken = true;
+                if(stringRedisTemplate.hasKey(userIdKey)){
+                     deleteUserToken = stringRedisTemplate.delete(userIdKey);
+                }
+
                 if(deleteAccessToken && deleteUserToken){
                     cr = CommonResult.OK();
                 }
