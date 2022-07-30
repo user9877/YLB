@@ -3,8 +3,11 @@ package com.bjpowernode.task;
 import com.bjpowernode.api.service.IncomeService;
 import com.bjpowernode.util.HttpClientUtils;
 import org.apache.dubbo.config.annotation.DubboReference;
+import org.apache.http.client.utils.DateUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 /**
  * ClassName:TaskManager
@@ -32,12 +35,12 @@ public class TaskManager {
     //定时查询支付结果
     @Scheduled(cron = "0 0/20 * * * ?")
     public void taskRechargeResult()  {
-        System.out.println("支付结果查询------开始");
+        System.out.println("支付结果查询------开始:"+ DateUtils.formatDate(new Date(),"yyyy-MM-dd HH:mm:ss"));
         try {
             HttpClientUtils.doGet("http://localhost:9000/pay/recharge/query");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        System.out.println("支付结果查询------完成");
+        System.out.println("支付结果查询------完成:"+DateUtils.formatDate(new Date(),"yyyy-MM-dd HH:mm:ss"));
     }
 }
